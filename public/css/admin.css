@@ -1,0 +1,59 @@
+/* ==========================================
+   ADMIN PANEL STYLES
+   ========================================== */
+
+.admin-table {
+    overflow-x: auto;
+}
+
+.admin-table table {
+    min-width: 800px;
+}
+
+/* Admin specific stat cards */
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+/* User card styles */
+.user-card {
+    background: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+}
+
+.user-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.user-card.overspending {
+    border-left: 4px solid var(--danger);
+}
+
+.user-card.healthy {
+    border-left: 4px solid var(--success);
+}
+
+/* Analytics cards */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+
+/* Export button styles */
+.export-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-lg);
+    background: var(--light-gray);
+    border-radius: var(--radius-md);
+    margin-top: var(--spacing-lg);
+}

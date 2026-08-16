@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackMyExpenses - Project Flowchart</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background: #f8f9fa;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 1rem;
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            color: #1e5f3f;
+            margin-bottom: 1rem;
+            border-bottom: 4px solid #d4af37;
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            color: #0a2540;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h2::before {
+            content: '▶';
+            color: #d4af37;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: #2d8659;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #718096;
+        }
+
+        .mermaid {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            margin: 2rem 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            page-break-inside: avoid;
+        }
+
+        .toc {
+            background: #1e5f3f;
+            color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h2 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .toc h2::before {
+            color: #d4af37;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .toc li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .toc a {
+            color: #f5d061;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toc a:hover {
+            color: #d4af37;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #1e5f3f 0%, #2d8659 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .info-box h3 {
+            color: #f5d061;
+            margin-top: 0;
+        }
+
+        .schema-table {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e9ecef;
+            text-align: center;
+            color: #718096;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 1rem;
+                max-width: 100%;
+            }
+
+            .section {
+                page-break-inside: avoid;
+                page-break-after: auto;
+                margin-bottom: 2rem;
+            }
+
+            .mermaid {
+                page-break-inside: avoid;
+                page-break-before: auto;
+                max-width: 100%;
+                overflow: visible !important;
+            }
+
+            h1 {
+                page-break-after: avoid;
+            }
+
+            h2 {
+                page-break-after: avoid;
+                page-break-before: auto;
+                margin-top: 1.5rem;
+            }
+
+            h3 {
+                page-break-after: avoid;
+            }
+
+            .toc {
+                page-break-after: always;
+            }
+
+            /* Ensure diagrams don't get cut off */
+            svg {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+        }
+
+        /* Additional styles for better PDF rendering */
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>TrackMyExpenses<br><small style="font-size: 1rem; font-weight: 400; color: #718096;">Project Flowchart
+                Documentation</small></h1>
+
+        <div class="info-box">
+            <h3>📄 How to Convert to PDF</h3>
+            <p><strong>Method 1 - Browser Print:</strong></p>
+            <ul style="margin-left: 1.5rem; margin-bottom: 0.5rem;">
+                <li>Press <code>Ctrl + P</code> (Windows) or <code>Cmd + P</code> (Mac)</li>
+                <li>Select "Save as PDF" as the destination</li>
+                <li>Set "Paper size" to A4</li>
+                <li>Enable "Background graphics"</li>
+                <li>Set margins to "Default" or "Minimum"</li>
+                <li>Click "Save"</li>
+            </ul>
+            <p><strong>Method 2 - Online Converter:</strong> Use tools like "HTML to PDF" converters for better diagram
+                rendering.</p>
+        </div>
+
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#architecture">1. System Architecture</a></li>
+                <li><a href="#authentication">2. User Authentication Flow</a></li>
+                <li><a href="#navigation">3. Application Navigation Flow</a></li>
+                <li><a href="#dataflow">4. Data Flow Architecture</a></li>
+                <li><a href="#api">5. API Endpoints Map</a></li>
+                <li><a href="#features">6. Feature Workflows</a></li>
+                <li><a href="#schema">7. Database Schema</a></li>
+                <li><a href="#techstack">8. Technology Stack Flow</a></li>
+            </ul>
+        </div>
+
+        <div class="section" id="architecture">
+            <h2>1. System Architecture</h2>
+            <p>The TrackMyExpenses application follows a three-tier architecture with a clear separation between client,
+                server, and data layers.</p>
+            <div class="mermaid">
+                graph TB
+                subgraph "Client Layer"
+                UI[Web Browser]
+                HTML[HTML Pages]
+                CSS[CSS Styles]
+                JS[JavaScript]
+                end
+
+                subgraph "Server Layer"
+                Express[Express.js Server]
+                Routes[Route Handlers]
+                Auth[Authentication]
+                Session[Session Management]
+                end
+
+                subgraph "Data Layer"
+                Users[(users.xlsx)]
+                Expenses[(expenses.xlsx)]
+                Uploads[/uploads/]
+                end
+
+                UI --> HTML
+                UI --> CSS
+                UI --> JS
+                JS --> Express
+                Express --> Routes
+                Express --> Auth
+                Express --> Session
+                Routes --> Users
+                Routes --> Expenses
+                Routes --> Uploads
+
+                style UI fill:#1e5f3f,color:#fff
+                style Express fill:#0a2540,color:#fff
+                style Users fill:#d4af37,color:#000
+                style Expenses fill:#d4af37,color:#000
+            </div>
+        </div>
+
+        <div class="section" id="authentication">
+            <h2>2. User Authentication Flow</h2>
+            <p>Complete user authentication process including signup, login, and role-based access control.</p>
+            <div class="mermaid">
+                flowchart TD
+                Start([User Opens Application]) --> Login[Login Page]
+                Login --> HasAccount{Has Account?}
+
+                HasAccount -->|No| Signup[Signup Page]
+                Signup --> EnterDetails[Enter Name, Email, Password, Budget]
+                EnterDetails --> ValidateSignup{Valid Data?}
+                ValidateSignup -->|No| SignupError[Show Error]
+                SignupError --> Signup
+                ValidateSignup -->|Yes| CreateUser[Create User in users.xlsx]
+                CreateUser --> LoginSuccess
+
+                HasAccount -->|Yes| EnterCreds[Enter Email & Password]
+                EnterCreds --> ValidateLogin{Valid Credentials?}
+                ValidateLogin -->|No| LoginError[Show Error]
+                LoginError --> Login
+                ValidateLogin -->|Yes| CheckRole{Check User Role}
+
+                CheckRole -->|Admin| AdminSession[Create Admin Session]
+                CheckRole -->|User| UserSession[Create User Session]
+
+                AdminSession --> LoginSuccess[Redirect to Dashboard]
+                UserSession --> LoginSuccess
+
+                LoginSuccess --> Dashboard[Dashboard Page]
+
+                style Start fill:#1e5f3f,color:#fff
+                style Dashboard fill:#d4af37,color:#000
+                style LoginSuccess fill:#2d8659,color:#fff
+            </div>
+        </div>
+
+        <div class="section" id="navigation">
+            <h2>3. Application Navigation Flow</h2>
+            <p>Navigation structure showing all pages and their interconnections throughout the application.</p>
+            <div class="mermaid">
+                flowchart LR
+                Dashboard[Dashboard] --> Tracking[Expense Tracking]
+                Dashboard --> Reports[Reports & Analytics]
+                Dashboard --> Savings[Savings]
+                Dashboard --> Profile[Profile]
+                Dashboard --> Admin[Admin Panel]
+
+                Tracking --> AddExpense[Add Expense]
+                Tracking --> EditExpense[Edit Expense]
+                Tracking --> DeleteExpense[Delete Expense]
+
+                Reports --> ViewCharts[View Charts]
+                Reports --> ExportData[Export Data]
+
+                Savings --> SavingsGoals[Savings Goals]
+                Savings --> FinancialInsights[Financial Insights]
+                Savings --> SavingsTips[Savings Tips]
+
+                Profile --> UpdateProfile[Update Profile]
+                Profile --> ChangeBudget[Change Budget]
+                Profile --> CustomBranding[Custom Branding]
+                Profile --> ProfileStats[Financial Stats]
+
+                Admin --> ManageUsers[Manage Users]
+                Admin --> ViewAllExpenses[View All Expenses]
+                Admin --> AdminExport[Export System Data]
+
+                style Dashboard fill:#1e5f3f,color:#fff
+                style Tracking fill:#2d8659,color:#fff
+                style Reports fill:#0a2540,color:#fff
+                style Savings fill:#d4af37,color:#000
+                style Profile fill:#1e3a5f,color:#fff
+                style Admin fill:#c62828,color:#fff
+            </div>
+        </div>
+
+        <div class="section" id="dataflow">
+            <h2>4. Data Flow Architecture</h2>
+            <p>How data flows from the user interface through the API layer to the storage and back.</p>
+            <div class="mermaid">
+                flowchart TB
+                subgraph "Frontend"
+                Page[HTML Page]
+                FormData[User Input]
+                Display[Display Results]
+                end
+
+                subgraph "API Layer"
+                API[/api/ endpoints]
+                AuthCheck{Authenticated?}
+                RoleCheck{Authorized?}
+                end
+
+                subgraph "Business Logic"
+                Auth[auth.js]
+                Expenses[expenses.js]
+                Analytics[analytics.js]
+                Chatbot[chatbot.js]
+                Excel[excel.js]
+                end
+
+                subgraph "Data Storage"
+                UsersDB[(users.xlsx)]
+                ExpensesDB[(expenses.xlsx)]
+                UploadsDir[/uploads/]
+                end
+
+                Page --> FormData
+                FormData --> API
+                API --> AuthCheck
+                AuthCheck -->|No| ErrorResponse[401 Unauthorized]
+                AuthCheck -->|Yes| RoleCheck
+                RoleCheck -->|No| ForbiddenResponse[403 Forbidden]
+                RoleCheck -->|Yes| Router{Route Handler}
+
+                Router --> Auth
+                Router --> Expenses
+                Router --> Analytics
+                Router --> Chatbot
+
+                Auth --> Excel
+                Expenses --> Excel
+                Analytics --> Excel
+
+                Excel --> UsersDB
+                Excel --> ExpensesDB
+                Excel --> UploadsDir
+
+                Excel --> Response[JSON Response]
+                ErrorResponse --> Display
+                ForbiddenResponse --> Display
+                Response --> Display
+
+                style FormData fill:#1e5f3f,color:#fff
+                style Response fill:#2d8659,color:#fff
+                style UsersDB fill:#d4af37,color:#000
+                style ExpensesDB fill:#d4af37,color:#000
+            </div>
+        </div>
+
+        <div class="section" id="api">
+            <h2>5. API Endpoints Map</h2>
+            <p>Complete mapping of all API endpoints organized by functionality.</p>
+            <div class="mermaid">
+                graph LR
+                subgraph "Authentication"
+                A1[POST /api/login]
+                A2[POST /api/signup]
+                A3[POST /api/logout]
+                A4[GET /api/profile/:id]
+                A5[PUT /api/profile/:id]
+                end
+
+                subgraph "Expenses"
+                E1[GET /api/expenses/:userId]
+                E2[POST /api/expenses]
+                E3[PUT /api/expenses/:id]
+                E4[DELETE /api/expenses/:id]
+                E5[GET /api/dashboard/:userId]
+                end
+
+                subgraph "Analytics"
+                AN1[GET /api/analytics/:userId]
+                AN2[GET /api/reports/:userId]
+                AN3[GET /api/trends/:userId]
+                end
+
+                subgraph "Admin"
+                AD1[GET /api/admin/users]
+                AD2[GET /api/admin/expenses]
+                AD3[POST /api/admin/export]
+                end
+
+                subgraph "Other"
+                C1[POST /api/chatbot/query]
+                B1[POST /api/branding]
+                end
+
+                style A1 fill:#1e5f3f,color:#fff
+                style E1 fill:#2d8659,color:#fff
+                style AN1 fill:#0a2540,color:#fff
+                style AD1 fill:#c62828,color:#fff
+                style C1 fill:#d4af37,color:#000
+            </div>
+        </div>
+
+        <div class="section" id="features">
+            <h2>6. Feature Workflows</h2>
+
+            <h3>6.1 Add Expense Workflow</h3>
+            <div class="mermaid">
+                flowchart TD
+                Start([User Clicks Add Expense]) --> Form[Show Expense Form]
+                Form --> FillData[Enter Amount, Category, Payment, Date, Notes]
+                FillData --> Validate{Valid Input?}
+
+                Validate -->|No| ShowError[Show Error]
+                ShowError --> Form
+
+                Validate -->|Yes| SendAPI[POST /api/expenses]
+                SendAPI --> SaveDB[Save to expenses.xlsx]
+                SaveDB --> UpdateCache[Update Cache]
+                UpdateCache --> Success[Success Message]
+                Success --> Refresh[Refresh List]
+                Refresh --> End([Complete])
+
+                style Start fill:#1e5f3f,color:#fff
+                style End fill:#2d8659,color:#fff
+                style SaveDB fill:#d4af37,color:#000
+            </div>
+
+            <h3>6.2 Dashboard Loading Workflow</h3>
+            <div class="mermaid">
+                flowchart TD
+                Start([User Opens Dashboard]) --> CheckAuth{Authenticated?}
+                CheckAuth -->|No| Redirect[Redirect to Login]
+                CheckAuth -->|Yes| FetchData[GET /api/dashboard/:userId]
+
+                FetchData --> CalcStats[Calculate Statistics]
+                CalcStats --> ProcessData{Process Data}
+
+                ProcessData --> TotalSpent[Total Expenses]
+                ProcessData --> Budget[Budget Status]
+                ProcessData --> Savings[Savings Amount]
+                ProcessData --> Categories[Category Breakdown]
+                ProcessData --> Trends[Spending Trends]
+
+                TotalSpent --> Render[Render Cards]
+                Budget --> Render
+                Savings --> Render
+                Categories --> Charts[Render Charts]
+                Trends --> Charts
+
+                Render --> Complete[Dashboard Ready]
+                Charts --> Complete
+                Complete --> LoadAI[Load AI Insights]
+                LoadAI --> End([Complete])
+
+                style Start fill:#1e5f3f,color:#fff
+                style End fill:#2d8659,color:#fff
+                style Complete fill:#d4af37,color:#000
+            </div>
+
+            <h3>6.3 Chatbot Interaction</h3>
+            <div class="mermaid">
+                flowchart TD
+                Start([Open Chatbot]) --> Welcome[Welcome Message]
+                Welcome --> ShowSuggestions[Quick Suggestions]
+                ShowSuggestions --> WaitInput[Wait for Input]
+
+                WaitInput --> UserQuery[User Question]
+                UserQuery --> SendQuery[POST /api/chatbot/query]
+                SendQuery --> AnalyzeIntent[Analyze Intent]
+
+                AnalyzeIntent --> CheckType{Query Type?}
+
+                CheckType -->|Spending| GetExpenses[Fetch Expenses]
+                CheckType -->|Budget| GetBudget[Fetch Budget]
+                CheckType -->|Tips| GetTips[Generate Tips]
+                CheckType -->|Category| GetCategory[Fetch Category Data]
+
+                GetExpenses --> GenResponse[Generate Response]
+                GetBudget --> GenResponse
+                GetTips --> GenResponse
+                GetCategory --> GenResponse
+
+                GenResponse --> DisplayResponse[Display Response]
+                DisplayResponse --> WaitInput
+
+                style Start fill:#1e5f3f,color:#fff
+                style GenResponse fill:#d4af37,color:#000
+                style DisplayResponse fill:#2d8659,color:#fff
+            </div>
+        </div>
+
+        <div class="section" id="schema">
+            <h2>7. Database Schema</h2>
+            <p>Excel-based data storage structure for users and expenses.</p>
+
+            <h3>users.xlsx Structure</h3>
+            <div class="schema-table">
+                | id | email | password | fullName | role | budget | createdAt | customTitle | customLogo |
+            </div>
+
+            <h3>expenses.xlsx Structure</h3>
+            <div class="schema-table">
+                | id | userId | amount | category | paymentMode | date | notes | tags | createdAt |
+            </div>
+        </div>
+
+        <div class="section" id="techstack">
+            <h2>8. Technology Stack Flow</h2>
+            <p>Complete technology stack and how components interact with each other.</p>
+            <div class="mermaid">
+                graph TB
+                subgraph "Frontend"
+                HTML5[HTML5]
+                CSS3[CSS3]
+                JS[JavaScript]
+                C3[C3.js Charts]
+                FA[Font Awesome]
+                end
+
+                subgraph "Backend"
+                Node[Node.js]
+                Express[Express.js]
+                Session[Sessions]
+                Bcrypt[Bcrypt]
+                Multer[Multer]
+                end
+
+                subgraph "Data"
+                XLSX[XLSX Library]
+                FileSystem[File System]
+                end
+
+                HTML5 --> Browser[Browser]
+                CSS3 --> Browser
+                JS --> Browser
+                C3 --> Browser
+                FA --> Browser
+
+                Browser --> Node
+                Node --> Express
+                Express --> Session
+                Express --> Bcrypt
+                Express --> Multer
+                Express --> XLSX
+                XLSX --> FileSystem
+
+                style Node fill:#1e5f3f,color:#fff
+                style Express fill:#0a2540,color:#fff
+                style Browser fill:#2d8659,color:#fff
+                style FileSystem fill:#d4af37,color:#000
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>TrackMyExpenses - Project Flowchart Documentation</strong></p>
+            <p>Version 1.0 | February 2026</p>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#1e5f3f',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#2d8659',
+                lineColor: '#718096',
+                secondaryColor: '#d4af37',
+                tertiaryColor: '#0a2540'
+            }
+        });
+    </script>
+</body>
+
+</html>

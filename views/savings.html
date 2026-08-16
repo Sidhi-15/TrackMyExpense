@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savings Goals - TrackMyExpenses</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Initialize dark theme immediately to prevent UI flashing
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme !== 'light') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Mobile Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="/images/logo.png" alt="TrackMyExpenses logo" class="brand-logo">
+                <h3 class="brand-title">TrackMyExpenses</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard.html" class="nav-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="/tracking.html" class="nav-link"><i class="fas fa-wallet"></i><span>Tracking</span></a>
+                <a href="/savings.html" class="nav-link active"><i
+                        class="fas fa-piggy-bank"></i><span>Savings</span></a>
+                <a href="/reports.html" class="nav-link"><i class="fas fa-chart-bar"></i><span>Reports &
+                        Analytics</span></a>
+                <a href="/predictions.html" class="nav-link"><i class="fas fa-brain"></i><span>AI Predictions</span></a>
+                <a href="/profile.html" class="nav-link"><i class="fas fa-user"></i><span>Profile</span></a>
+                <div class="nav-divider"></div>
+                <a href="#" class="nav-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <!-- Header with Toggle -->
+            <header class="dashboard-header">
+                <button id="sidebarToggle" class="btn btn-icon hide-desktop" title="Open menu" style="background: var(--gray); color: var(--text-primary);">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2>Savings</h2>
+                <div class="header-actions">
+                    <button id="themeToggle" class="theme-toggle-btn" title="Toggle Light / Dark Mode">
+                        <i class="fas fa-moon"></i>
+                        <span class="theme-label">Dark Mode</span>
+                    </button>
+                    <div class="user-greeting">Hi, <span id="userName">User</span>!</div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <!-- SECTION 1: Financial Insights -->
+                <div class="card mt-4">
+                    <h3 class="card-title"><i class="fas fa-chart-pie"></i> Financial Insights</h3>
+                    <div class="grid grid-3">
+                        <div class="insight-card">
+                            <div class="insight-icon" style="background: var(--primary-gradient);">
+                                <i class="fas fa-trending-up"></i>
+                            </div>
+                            <div class="insight-info">
+                                <h4 class="insight-value" id="monthlyAvgSavings">₹0</h4>
+                                <p class="insight-label">Current Savings</p>
+                                <span class="insight-trend positive"><i class="fas fa-check-circle"></i> Live budget analysis</span>
+                            </div>
+                        </div>
+
+                        <div class="insight-card">
+                            <div class="insight-icon" style="background: var(--secondary-gradient);">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="insight-info">
+                                <h4 class="insight-value" id="savingsRate">0%</h4>
+                                <p class="insight-label">Savings Rate</p>
+                                <span class="insight-trend positive" id="savingsTrend"><i class="fas fa-arrow-up"></i> Based on budget</span>
+                            </div>
+                        </div>
+
+                        <div class="insight-card">
+                            <div class="insight-icon" style="background: var(--success-gradient);">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="insight-info">
+                                <h4 class="insight-value" id="totalExpensesCount">0</h4>
+                                <p class="insight-label">Total Expenses Tracked</p>
+                                <span class="insight-trend" id="totalSpentText">₹0 spent</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: Your Savings Summary -->
+                <div class="card mt-4">
+                    <h3 class="card-title"><i class="fas fa-piggy-bank"></i> Your Savings Summary</h3>
+                    <div class="grid grid-3">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: var(--success-gradient);"><i
+                                    class="fas fa-coins"></i></div>
+                            <div class="stat-info">
+                                <h3 class="stat-value" id="currentSavings">₹0</h3>
+                                <p class="stat-label">Current Savings</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: var(--primary-gradient);"><i
+                                    class="fas fa-bullseye"></i></div>
+                            <div class="stat-info">
+                                <h3 class="stat-value">Coming Soon</h3>
+                                <p class="stat-label">Savings Goals Feature</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: var(--warning-gradient);"><i
+                                    class="fas fa-chart-line"></i></div>
+                            <div class="stat-info">
+                                <h3 class="stat-value">Track Progress</h3>
+                                <p class="stat-label">Monitor Your Goals</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: Savings Tips -->
+                <div class="card mt-4">
+                    <h3 class="card-title"><i class="fas fa-lightbulb"></i> Savings Tips</h3>
+                    <div class="suggestions-list">
+                        <div class="suggestion-item success">
+                            <i class="fas fa-piggy-bank suggestion-icon"></i>
+                            <p class="suggestion-text">Set up automatic transfers to your savings account on payday.</p>
+                        </div>
+                        <div class="suggestion-item info">
+                            <i class="fas fa-chart-pie suggestion-icon"></i>
+                            <p class="suggestion-text">Follow the 50/30/20 rule: 50% needs, 30% wants, 20% savings.</p>
+                        </div>
+                        <div class="suggestion-item warning">
+                            <i class="fas fa-shopping-cart suggestion-icon"></i>
+                            <p class="suggestion-text">Reduce impulse buying by waiting 24 hours before making
+                                non-essential purchases.</p>
+                        </div>
+                        <div class="suggestion-item success">
+                            <i class="fas fa-wallet suggestion-icon"></i>
+                            <p class="suggestion-text">Use cashback and rewards programs to earn while you spend.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        requireAuth();
+        loadBranding();
+
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            logout();
+        });
+
+        // Load current savings
+        async function loadSavings() {
+            const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+            if (!user.id) return;
+            try {
+                const response = await fetch(`/api/dashboard/${user.id}`);
+                const data = await response.json();
+                const savings = parseFloat(data.summary.savings) || 0;
+                const budget = parseFloat(data.summary.budget) || 50000;
+                const totalSpent = parseFloat(data.summary.totalSpent) || 0;
+                const rate = budget > 0 ? Math.max(0, Math.round((savings / budget) * 100)) : 0;
+
+                document.getElementById('currentSavings').textContent = '₹' + savings.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('monthlyAvgSavings').textContent = '₹' + savings.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('savingsRate').textContent = rate + '%';
+                document.getElementById('totalExpensesCount').textContent = data.summary.expenseCount || 0;
+                document.getElementById('totalSpentText').textContent = '₹' + totalSpent.toLocaleString('en-IN') + ' spent';
+            } catch (error) {
+                console.error('Error loading savings:', error);
+            }
+        }
+        loadSavings();
+    </script>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header" id="chatbotHeader">
+            <div class="chatbot-title">
+                <i class="fas fa-robot"></i>
+                <span>Financial Assistant</span>
+            </div>
+            <button class="chatbot-close" id="chatbotClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-body" id="chatbotBody">
+            <div class="chat-message bot-message">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    Hello! 👋 I'm your financial assistant. How can I help you today?
+                </div>
+            </div>
+        </div>
+        <div class="chatbot-suggestions" id="chatbotSuggestions"></div>
+        <div class="chatbot-footer">
+            <input type="text" id="chatbotInput" placeholder="Ask me anything about your finances..."
+                class="chatbot-input">
+            <button class="chatbot-send" id="chatbotSend">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <button class="chatbot-toggle" id="chatbotToggle">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <script src="/js/chatbot.js"></script>

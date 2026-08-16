@@ -1,0 +1,12 @@
+node_modules
+.env
+.env.local
+*.log
+
+# SQLite database files (created fresh on server start)
+data/*.db*
+data/*.xlsx
+
+# User uploaded files (excluded from repo, folder kept via .gitkeep)
+public/uploads/*
+!public/uploads/.gitkeep

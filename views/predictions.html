@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/images/logo.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Predictions - TrackMyExpenses</title>
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme !== 'light') document.documentElement.setAttribute('data-theme', 'dark');
+</script>
+<style>
+.pred-hero{background:#0B211A;border-radius:1.125rem;padding:2rem;color:#fff;margin-bottom:1.5rem;position:relative;overflow:hidden;border:1px solid rgba(18,184,134,0.2)}
+.pred-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:rgba(201,162,39,0.12);border-radius:50%;pointer-events:none}
+.pred-hero h1{font-size:1.6rem;margin:0 0 0.4rem;display:flex;align-items:center;gap:.6rem;color:#fff}
+.pred-hero p{margin:0;opacity:.85;font-size:.95rem;color:rgba(255,255,255,0.85)}
+.salary-card,.purchase-card,.chart-card,.list-card{background:var(--white);border-radius:1.125rem;padding:1.5rem;box-shadow:var(--shadow-md);border:1px solid var(--gray);margin-bottom:1.5rem}
+[data-theme=dark] .salary-card,[data-theme=dark] .purchase-card,[data-theme=dark] .chart-card,[data-theme=dark] .list-card{background:var(--bg-secondary);border-color:rgba(255,255,255,0.1)}
+.salary-card h3,.purchase-card h3,.chart-card h3,.list-card h3{font-size:1.05rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:.5rem}
+.form-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:1rem;align-items:end}
+@media(max-width:768px){.form-row,.purchase-form-row{grid-template-columns:1fr}}
+.summary-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+@media(max-width:600px){.summary-strip{grid-template-columns:1fr}}
+.s-item{background:var(--white);border-radius:1rem;padding:1.1rem;box-shadow:var(--shadow-sm);border:1px solid var(--gray);text-align:center}
+[data-theme=dark] .s-item{background:var(--bg-secondary);border-color:rgba(255,255,255,0.1)}
+.s-val{font-size:1.4rem;font-weight:800;color:var(--primary)}
+.s-lbl{font-size:.78rem;color:var(--text-secondary);margin-top:2px}
+.pred-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem;align-items:stretch}
+@media(max-width:900px){.pred-grid{grid-template-columns:1fr}}
+.cat-item{display:flex;align-items:center;gap:.65rem;padding:.65rem 0;border-bottom:1px solid var(--gray)}
+.cat-item:last-child{border-bottom:none}
+.cat-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.cat-info{flex:1;min-width:0}
+.cat-name{font-weight:600;font-size:.85rem;color:var(--text-primary)}
+.cat-amount{font-weight:700;color:var(--primary);font-size:.88rem}
+.cat-bar{height:5px;background:var(--gray);border-radius:99px;margin-top:3px;overflow:hidden}
+.cat-bar-fill{height:100%;border-radius:99px;transition:width 1s ease}
+.cat-pct{font-size:.72rem;color:var(--text-light);min-width:32px;text-align:right}
+.conf-badge{font-size:.68rem;padding:1px 7px;border-radius:99px;font-weight:600}
+.conf-high{background:rgba(18,184,134,.12);color:#12B886}
+.conf-med{background:rgba(201,162,39,.15);color:#C9A227}
+.conf-low{background:rgba(217,83,79,.1);color:#D9534F}
+.new-user-banner{background:#0B211A;border-radius:1rem;padding:1rem 1.25rem;color:#fff;margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem;border:1px solid #C9A227}
+.new-user-banner i{font-size:1.6rem;flex-shrink:0}
+.new-user-banner h4{margin:0 0 .2rem;font-size:.95rem}
+.new-user-banner p{margin:0;font-size:.82rem;opacity:.92;color:rgba(255,255,255,0.9)}
+.purchase-form-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:1rem;align-items:end}
+.plan-result{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:1rem;padding:1.25rem;margin-top:1rem;border:1px solid #bbf7d0;display:none}
+.plan-result.danger-plan{background:linear-gradient(135deg,#fff5f5,#fee2e2);border-color:#fecaca}
+[data-theme=dark] .plan-result{background:rgba(45,106,79,.15);border-color:rgba(45,106,79,.3)}
+[data-theme=dark] .plan-result.danger-plan{background:rgba(155,34,38,.15);border-color:rgba(155,34,38,.3)}
+.plan-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:.8rem}
+.plan-metric{text-align:center;padding:.6rem;background:rgba(255,255,255,.6);border-radius:.6rem}
+[data-theme=dark] .plan-metric{background:rgba(255,255,255,.05)}
+.plan-metric .pm-val{font-size:1rem;font-weight:700}
+.plan-metric .pm-lbl{font-size:.72rem;color:var(--text-secondary)}
+.plan-suggestions{list-style:none;padding:0;margin:0}
+.plan-suggestions li{padding:.4rem 0;display:flex;align-items:flex-start;gap:.4rem;font-size:.88rem;border-bottom:1px solid rgba(0,0,0,.06)}
+.plan-suggestions li:last-child{border-bottom:none}
+.plan-suggestions li::before{content:'→';color:var(--primary);font-weight:700;flex-shrink:0}
+.insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+@media(max-width:700px){.insight-grid{grid-template-columns:1fr}}
+.insight-item{background:var(--white);border-radius:1rem;padding:1.25rem;box-shadow:var(--shadow-sm);border:1px solid var(--gray);text-align:center;transition:all .3s}
+[data-theme=dark] .insight-item{background:var(--bg-secondary);border-color:rgba(255,255,255,0.1)}
+.insight-item:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--primary)}
+.insight-icon{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#1B4332,#2D6A4F);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto .75rem}
+.insight-item h4{font-size:.9rem;margin-bottom:.4rem}
+.insight-item p{font-size:.8rem;margin:0;color:var(--text-secondary)}
+.toast{position:fixed;top:1.25rem;right:1.25rem;padding:.85rem 1.25rem;border-radius:.875rem;color:#fff;font-weight:600;z-index:9999;animation:fadeInDown .4s ease;box-shadow:var(--shadow-lg);font-size:.9rem}
+.toast-success{background:linear-gradient(135deg,#1B4332,#2D6A4F)}
+.toast-error{background:linear-gradient(135deg,#9B2226,#AE2012)}
+.spinning{animation:spin 1s linear infinite}
+.chart-legend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem .75rem;margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--gray)}
+.leg-item{display:flex;align-items:center;gap:.5rem;font-size:.88rem;color:var(--text-secondary);min-width:0}
+.leg-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+.leg-name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-primary);font-size:.88rem}
+.leg-val{font-size:.8rem;color:var(--text-secondary);white-space:nowrap;margin-top:1px}
+</style>
+</head>
+<body>
+<div class="dashboard-layout">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="/images/logo.png" alt="TrackMyExpenses" class="brand-logo" id="sidebarLogo">
+      <h3 class="brand-title" id="sidebarTitle">TrackMyExpenses</h3>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/dashboard.html" class="nav-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+      <a href="/tracking.html" class="nav-link"><i class="fas fa-wallet"></i><span>Tracking</span></a>
+      <a href="/savings.html" class="nav-link"><i class="fas fa-piggy-bank"></i><span>Savings</span></a>
+      <a href="/reports.html" class="nav-link"><i class="fas fa-chart-bar"></i><span>Reports &amp; Analytics</span></a>
+      <a href="/predictions.html" class="nav-link active"><i class="fas fa-brain"></i><span>AI Predictions</span></a>
+      <a href="/profile.html" class="nav-link"><i class="fas fa-user"></i><span>Profile</span></a>
+      <div id="adminNavLink"></div>
+      <div class="nav-divider"></div>
+      <a href="#" class="nav-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="dashboard-header flex-between" style="padding:1rem 1.5rem">
+      <button id="sidebarToggle" class="btn btn-icon hide-desktop" style="background:var(--gray);color:var(--text-primary)">
+        <i class="fas fa-bars"></i>
+      </button>
+      <h2 style="margin:0;font-size:1.25rem"><i class="fas fa-brain" style="color:var(--primary)"></i> AI Predictions</h2>
+      <div style="display:flex;gap:.75rem;align-items:center">
+        <button id="themeToggle" class="theme-toggle-btn" title="Toggle Light / Dark Mode">
+          <i class="fas fa-moon"></i>
+          <span class="theme-label">Dark Mode</span>
+        </button>
+        <div style="font-weight:600">Hi, <span id="userName">User</span>!</div>
+      </div>
+    </header>
+
+    <div class="dashboard-content">
+
+      <!-- Hero -->
+      <div class="pred-hero animate-fade-in-up">
+        <h1><i class="fas fa-brain"></i> AI-Powered Financial Predictions</h1>
+        <p>Enter your monthly salary and get smart spending recommendations based on your history</p>
+      </div>
+
+      <!-- New User Banner -->
+      <div class="new-user-banner" id="newUserBanner" style="display:none">
+        <i class="fas fa-star"></i>
+        <div>
+          <h4>Welcome! Smart Defaults Applied 🎉</h4>
+          <p>Since you're new, we used the proven 50/30/20 rule. Add expenses to get personalized predictions!</p>
+        </div>
+      </div>
+
+      <!-- Salary Input -->
+      <div class="salary-card animate-fade-in-up">
+        <h3><i class="fas fa-money-bill-wave" style="color:#2D6A4F"></i> Enter Monthly Salary</h3>
+        <form id="salaryForm">
+          <div class="form-row">
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Monthly Salary (₹)</label>
+              <input type="number" id="salary" class="form-input" placeholder="e.g. 50000" min="1" required>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Month</label>
+              <select id="month" class="form-input" required>
+                <option value="">Select Month</option>
+                <option>January</option><option>February</option><option>March</option>
+                <option>April</option><option>May</option><option>June</option>
+                <option>July</option><option>August</option><option>September</option>
+                <option>October</option><option>November</option><option>December</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Year</label>
+              <input type="number" id="year" class="form-input" min="2020" max="2035" required>
+            </div>
+            <button type="submit" class="btn btn-primary" id="predictBtn">
+              <i class="fas fa-calculator"></i> Predict
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Summary Strip -->
+      <div class="summary-strip" id="summaryStrip" style="display:none">
+        <div class="s-item"><div class="s-val" id="sumSalary">₹0</div><div class="s-lbl">Monthly Salary</div></div>
+        <div class="s-item"><div class="s-val" id="sumSpend" style="color:#9B2226">₹0</div><div class="s-lbl">Predicted Expenses</div></div>
+        <div class="s-item"><div class="s-val" id="sumSave" style="color:#2D6A4F">₹0</div><div class="s-lbl">Predicted Savings</div></div>
+      </div>
+
+      <!-- Charts + List -->
+      <div id="predictionsSection" style="display:none">
+        <div class="pred-grid">
+          <div class="chart-card" style="display:flex;flex-direction:column">
+            <h3><i class="fas fa-chart-pie" style="color:#2D6A4F"></i> Spending Breakdown</h3>
+            <div style="position:relative;flex:1;min-height:300px">
+              <canvas id="predictionsChart"></canvas>
+            </div>
+            <div id="chartLegend" class="chart-legend-grid"></div>
+          </div>
+          <div class="list-card">
+            <h3><i class="fas fa-list" style="color:#D4AF37"></i> Category Predictions</h3>
+            <div id="predictionsList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Purchase Planner -->
+      <div class="purchase-card animate-fade-in-up">
+        <h3><i class="fas fa-shopping-cart" style="color:#2D6A4F"></i> Purchase Planning Assistant</h3>
+        <div class="purchase-form-row">
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Item Name</label>
+            <input type="text" id="item" class="form-input" placeholder="e.g. Laptop, Phone, Bike">
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Price (₹)</label>
+            <input type="number" id="price" class="form-input" placeholder="e.g. 45000" min="1">
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Priority</label>
+            <select id="priority" class="form-input">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-secondary" id="purchaseBtn">
+            <i class="fas fa-lightbulb"></i> Plan
+          </button>
+        </div>
+        <div class="plan-result" id="purchasePlan">
+          <h4 id="planTitle" style="margin-bottom:.75rem;font-size:.95rem"></h4>
+          <div class="plan-metrics">
+            <div class="plan-metric"><div class="pm-val" id="planPrice"></div><div class="pm-lbl">Item Price</div></div>
+            <div class="plan-metric"><div class="pm-val" id="planBudget"></div><div class="pm-lbl">Available</div></div>
+            <div class="plan-metric"><div class="pm-val" id="planAfford"></div><div class="pm-lbl">Can Afford?</div></div>
+          </div>
+          <ul class="plan-suggestions" id="planSuggestions"></ul>
+        </div>
+      </div>
+
+      <!-- Insight Cards -->
+      <div class="insight-grid animate-fade-in-up">
+        <div class="insight-item">
+          <div class="insight-icon"><i class="fas fa-chart-pie"></i></div>
+          <h4>Spending Patterns</h4>
+          <p>AI analyzes your history to predict future expenses based on real habits</p>
+        </div>
+        <div class="insight-item">
+          <div class="insight-icon"><i class="fas fa-balance-scale"></i></div>
+          <h4>Budget Optimization</h4>
+          <p>50/30/20 rule recommendations optimized for your income level</p>
+        </div>
+        <div class="insight-item">
+          <div class="insight-icon"><i class="fas fa-shopping-cart"></i></div>
+          <h4>Purchase Planning</h4>
+          <p>Know exactly when you can afford big purchases with AI timing analysis</p>
+        </div>
+      </div>
+
+    </div><!-- /dashboard-content -->
+  </main>
+</div>
+
+<script src="/js/auth.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const user = checkAuth();
+  if (user) document.getElementById('userName').textContent = user.fullName || user.email || 'User';
+
+  setDefaults();
+  loadExistingPredictions();
+
+  document.getElementById('logoutBtn').addEventListener('click', e => { e.preventDefault(); logout(); });
+  document.getElementById('salaryForm').addEventListener('submit', handleSalary);
+  document.getElementById('purchaseBtn').addEventListener('click', handlePurchase);
+
+  // Sidebar toggle
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+    });
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+    });
+  }
+
+  // Theme toggle
+  const themeBtn = document.getElementById('themeToggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+      themeBtn.querySelector('i').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+    });
+    const t = localStorage.getItem('theme');
+    themeBtn.querySelector('i').className = t === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+  }
+
+  // Admin link
+  try {
+    const u = JSON.parse(sessionStorage.getItem('user') || '{}');
+    if (u.role === 'admin') {
+      document.getElementById('adminNavLink').innerHTML =
+        '<a href="/admin.html" class="nav-link"><i class="fas fa-shield-alt"></i><span>Admin</span></a>';
+    }
+  } catch(e) {}
+});
+
+function getUserId() {
+  try { return JSON.parse(sessionStorage.getItem('user')).id; } catch { return null; }
+}
+
+function setDefaults() {
+  const months = ['January','February','March','April','May','June',
+    'July','August','September','October','November','December'];
+  const now = new Date();
+  document.getElementById('month').value = months[now.getMonth()];
+  document.getElementById('year').value = now.getFullYear();
+}
+
+let chartInstance = null;
+const COLORS = ['#1B4332','#2D6A4F','#D4AF37','#C5A059','#9B2226','#3fa66e','#1e3a5f','#6b7280','#f59e0b'];
+
+async function handleSalary(e) {
+  e.preventDefault();
+  const userId = getUserId();
+  if (!userId) return showToast('Please log in first', 'error');
+  const btn = document.getElementById('predictBtn');
+  btn.innerHTML = '<i class="fas fa-spinner spinning"></i> Generating...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/salary', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId,
+        salary: document.getElementById('salary').value,
+        month: document.getElementById('month').value,
+        year: document.getElementById('year').value
+      })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast('Predictions generated!', 'success');
+      renderPredictions(data.predictions, data.salary, data.isNewUser);
+      document.getElementById('newUserBanner').style.display = data.isNewUser ? 'flex' : 'none';
+    } else showToast(data.message || 'Error generating predictions', 'error');
+  } catch { showToast('Connection error', 'error'); }
+  finally { btn.innerHTML = '<i class="fas fa-calculator"></i> Predict'; btn.disabled = false; }
+}
+
+async function handlePurchase() {
+  const userId = getUserId();
+  if (!userId) return showToast('Please log in first', 'error');
+  const item = document.getElementById('item').value.trim();
+  const price = document.getElementById('price').value;
+  if (!item || !price) return showToast('Please fill in item and price', 'error');
+  try {
+    const res = await fetch('/api/purchase-plan', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, item, price, priority: document.getElementById('priority').value })
+    });
+    const data = await res.json();
+    if (res.ok) renderPurchasePlan(data.plan);
+    else showToast(data.message || 'Error', 'error');
+  } catch { showToast('Connection error', 'error'); }
+}
+
+function renderPredictions(predictions, salary, isNewUser) {
+  const cats = Object.keys(predictions);
+  const amounts = cats.map(c => predictions[c].predictedAmount);
+  const savings = predictions['Savings'] ? predictions['Savings'].predictedAmount : 0;
+  const spent = amounts.reduce((a,b)=>a+b,0) - savings;
+
+  document.getElementById('sumSalary').textContent = '₹' + Number(salary).toLocaleString('en-IN');
+  document.getElementById('sumSpend').textContent = '₹' + Math.round(spent).toLocaleString('en-IN');
+  document.getElementById('sumSave').textContent = '₹' + Math.round(savings).toLocaleString('en-IN');
+  document.getElementById('summaryStrip').style.display = 'grid';
+
+  if (chartInstance) chartInstance.destroy();
+
+  const total = amounts.reduce((a,b)=>a+b,0);
+
+  // Center-text plugin
+  const centerTextPlugin = {
+    id: 'centerText',
+    afterDraw(chart) {
+      const { ctx, chartArea: { left, right, top, bottom } } = chart;
+      const cx = (left + right) / 2, cy = (top + bottom) / 2;
+      ctx.save();
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = 'bold 14px Inter, sans-serif';
+      ctx.fillStyle = 'rgba(128,128,128,0.8)';
+      ctx.fillText('Total', cx, cy - 12);
+      ctx.font = 'bold 17px Inter, sans-serif';
+      ctx.fillStyle = 'var(--text-primary)';
+      ctx.fillText('₹' + Math.round(total).toLocaleString('en-IN'), cx, cy + 12);
+      ctx.restore();
+    }
+  };
+
+  chartInstance = new Chart(document.getElementById('predictionsChart').getContext('2d'), {
+    type: 'doughnut',
+    data: { labels: cats, datasets: [{ data: amounts, backgroundColor: COLORS.slice(0, cats.length), borderWidth: 3, borderColor: 'transparent', hoverOffset: 10, hoverBorderColor: '#fff' }] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ` ₹${Math.round(ctx.raw).toLocaleString('en-IN')} — ${((ctx.raw/total)*100).toFixed(1)}%`
+          }
+        }
+      }
+    },
+    plugins: [centerTextPlugin]
+  });
+
+  // Custom HTML legend below chart (3-column grid)
+  const legend = document.getElementById('chartLegend');
+  legend.innerHTML = cats.map((cat, i) => `
+    <div class="leg-item" title="${cat}: ₹${Math.round(amounts[i]).toLocaleString('en-IN')}">
+      <span class="leg-dot" style="background:${COLORS[i%COLORS.length]}"></span>
+      <div style="min-width:0">
+        <div class="leg-name">${cat}</div>
+        <div class="leg-val">₹${Math.round(amounts[i]).toLocaleString('en-IN')}</div>
+      </div>
+    </div>`).join('');
+
+  const list = document.getElementById('predictionsList');
+  list.innerHTML = '';
+  cats.forEach((cat, i) => {
+    const pred = predictions[cat];
+    const pct = salary > 0 ? ((pred.predictedAmount / salary) * 100).toFixed(1) : 0;
+    const conf = pred.confidence || 0;
+    const confClass = conf >= 0.7 ? 'conf-high' : conf >= 0.4 ? 'conf-med' : 'conf-low';
+    const confLabel = conf >= 0.7 ? 'High' : conf >= 0.4 ? 'Med' : 'Low';
+    list.innerHTML += `<div class="cat-item">
+      <div class="cat-icon" style="background:${COLORS[i%COLORS.length]}22">${pred.icon||'📊'}</div>
+      <div class="cat-info">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="cat-name">${cat}</span>
+          <span class="cat-amount">₹${Math.round(pred.predictedAmount).toLocaleString('en-IN')}</span>
+        </div>
+        <div class="cat-bar"><div class="cat-bar-fill" style="width:${Math.min(pct,100)}%;background:${COLORS[i%COLORS.length]}"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:2px">
+          <span class="conf-badge ${confClass}">Confidence: ${confLabel}</span>
+          <span class="cat-pct">${pct}%</span>
+        </div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('predictionsSection').style.display = 'block';
+}
+
+function renderPurchasePlan(plan) {
+  document.getElementById('planTitle').textContent = `Purchase Plan: ${plan.item}`;
+  document.getElementById('planPrice').textContent = '₹' + Number(plan.price).toLocaleString('en-IN');
+  document.getElementById('planBudget').textContent = '₹' + Number(plan.availableBudget).toLocaleString('en-IN');
+  document.getElementById('planAfford').textContent = plan.canAfford ? '✅ Yes' : '❌ No';
+  const ul = document.getElementById('planSuggestions');
+  ul.innerHTML = '';
+  plan.alternativeSuggestions.forEach(s => { ul.innerHTML += `<li>${s}</li>`; });
+  const el = document.getElementById('purchasePlan');
+  el.className = 'plan-result' + (plan.canAfford ? '' : ' danger-plan');
+  el.style.display = 'block';
+}
+
+async function loadExistingPredictions() {
+  const userId = getUserId();
+  if (!userId) return;
+  try {
+    const res = await fetch(`/api/predictions/${userId}`);
+    const data = await res.json();
+    if (res.ok && data.predictions && Object.keys(data.predictions).length > 0) {
+      const key = Object.keys(data.predictions)[0];
+      const preds = data.predictions[key];
+      const salary = data.salaries && data.salaries.length > 0 ? data.salaries[0].salary : 0;
+      const iconMap = {'Food & Dining':'🍽️','Housing & Rent':'🏠','Transport':'🚗','Health':'💊','Shopping':'🛍️','Entertainment':'🎬','Education':'📚','Savings':'💰','Other':'📦'};
+      const predMap = {};
+      preds.forEach(p => { predMap[p.category] = { predictedAmount: p.predictedAmount, confidence: p.confidence, icon: iconMap[p.category]||'📊' }; });
+      renderPredictions(predMap, salary, false);
+    }
+  } catch(e) { console.error(e); }
+}
+
+function showToast(msg, type) {
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+</script>
+</body>
+</html>

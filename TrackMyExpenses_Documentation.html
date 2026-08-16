@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackMyExpenses - Complete Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            color: #7f8c8d;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .section {
+            background: #f8f9fa;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .header-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .info-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .info-box strong {
+            color: #3498db;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+        
+        .tech-stack {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .tech-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-top: 3px solid #3498db;
+        }
+        
+        .tech-item h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .tech-item ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .tech-item li {
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+        
+        .flowchart {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px dashed #3498db;
+        }
+        
+        .flowchart img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .api-endpoint {
+            background: #ecf0f1;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #e74c3c;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        
+        .api-method {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-right: 10px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .post {
+            background: #27ae60;
+        }
+        
+        .get {
+            background: #3498db;
+        }
+        
+        .put {
+            background: #f39c12;
+        }
+        
+        .delete {
+            background: #e74c3c;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        table thead {
+            background: #34495e;
+            color: white;
+        }
+        
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #9b59b6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .feature-item strong {
+            color: #9b59b6;
+        }
+        
+        .page-break {
+            page-break-after: always;
+            border-top: 3px dashed #bdc3c7;
+            padding-top: 30px;
+            margin: 40px 0;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 20px;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+            .container {
+                max-width: 100%;
+            }
+        }
+        
+        .footer {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #bdc3c7;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Title Page -->
+        <h1>📊 TrackMyExpenses</h1>
+        <h2 style="border-left: none; text-align: center; color: #3498db; font-size: 1.5em; margin-top: 0;">Modern Expense Tracker with AI-Powered Insights</h2>
+        
+        <div class="header-info">
+            <div class="info-box">
+                <strong>Version:</strong> 1.0.0<br>
+                <strong>Status:</strong> Active Development<br>
+                <strong>Type:</strong> Web Application
+            </div>
+            <div class="info-box">
+                <strong>Last Updated:</strong> February 2026<br>
+                <strong>License:</strong> MIT<br>
+                <strong>Repository:</strong> Local
+            </div>
+        </div>
+        
+        <!-- Overview Section -->
+        <div class="section">
+            <h2>📋 Project Overview</h2>
+            <p><strong>TrackMyExpenses</strong> is a comprehensive, feature-rich web application designed to help users track their spending, manage budgets, and gain AI-powered financial insights. The application combines modern web technologies with intelligent analytics to provide users with a powerful tool for personal finance management.</p>
+            <p style="margin-top: 15px;"><strong>Key Vision:</strong> Empower users to take control of their finances through intuitive tracking, real-time analytics, and AI-driven insights.</p>
+        </div>
+        
+        <div class="page-break"></div>
+        
+        <!-- Features Section -->
+        <h2>✨ Core Features</h2>
+        <div class="feature-list">
+            <div class="feature-item">
+                <strong>🔐 User Authentication</strong><br>
+                Secure login/signup with password hashing and role-based access (User/Admin)
+            </div>
+            <div class="feature-item">
+                <strong>💰 Expense Tracking</strong><br>
+                Track expenses by category, payment mode, and date with detailed notes
+            </div>
+            <div class="feature-item">
+                <strong>📊 Dashboard</strong><br>
+                Beautiful animated dashboard with real-time charts and statistics
+            </div>
+            <div class="feature-item">
+                <strong>💳 Budget Management</strong><br>
+                Set monthly budgets and track spending progress with visual indicators
+            </div>
+            <div class="feature-item">
+                <strong>🤖 AI Chatbot</strong><br>
+                Financial chatbot for budget advice and personalized expense queries
+            </div>
+            <div class="feature-item">
+                <strong>📈 Smart Insights</strong><br>
+                AI-powered suggestions and intelligent spending pattern analysis
+            </div>
+            <div class="feature-item">
+                <strong>🎯 Savings Goals</strong><br>
+                Create, track, and visualize savings goals with progress indicators
+            </div>
+            <div class="feature-item">
+                <strong>📉 Reports & Analytics</strong><br>
+                Comprehensive analytics with pie charts, trends, and comparisons
+            </div>
+            <div class="feature-item">
+                <strong>👨‍💼 Admin Panel</strong><br>
+                Manage users, view all expenses, and export data to Excel
+            </div>
+            <div class="feature-item">
+                <strong>🎨 Custom Branding</strong><br>
+                Upload custom logo and configure application title
+            </div>
+            <div class="feature-item">
+                <strong>📱 Responsive Design</strong><br>
+                Works perfectly on mobile, tablet, and desktop devices
+            </div>
+            <div class="feature-item">
+                <strong>💾 Data Export</strong><br>
+                Export expense reports and analytics to Excel format
+            </div>
+        </div>
+        
+        <div class="page-break"></div>
+        
+        <!-- Technology Stack -->
+        <h2>🛠️ Technology Stack</h2>
+        
+        <div class="tech-stack">
+            <div class="tech-item">
+                <h4>Frontend Technologies</h4>
+                <ul>
+                    <li><strong>HTML5</strong> - Semantic markup</li>
+                    <li><strong>CSS3</strong> - Styling & animations</li>
+                    <li><strong>JavaScript (ES6+)</strong> - Client logic</li>
+                    <li><strong>C3.js</strong> - Data visualization</li>
+                    <li><strong>D3.js</strong> - Advanced charting</li>
+                    <li><strong>Responsive Design</strong> - Mobile-first</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <h4>Backend Technologies</h4>
+                <ul>
+                    <li><strong>Node.js</strong> - Runtime</li>
+                    <li><strong>Express.js</strong> - Web framework</li>
+                    <li><strong>bcrypt</strong> - Password hashing</li>
+                    <li><strong>express-session</strong> - Sessions</li>
+                    <li><strong>Multer</strong> - File uploads</li>
+                    <li><strong>CORS</strong> - Cross-origin requests</li>
+                </ul>
+            </div>
+            <div class="tech-item">
+                <h4>Data & Storage</h4>
+                <ul>
+                    <li><strong>XLSX</strong> - Excel file handling</li>
+                    <li><strong>Excel Files</strong> - Database storage</li>
+                    <li><strong>JSON</strong> - Data interchange</li>
+                    <li><strong>File System</strong> - Static files</li>
+                    <li><strong>Session Storage</strong> - Client cache</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="page-break"></div>
+        
+        <!-- Architecture Section -->
+        <h2>🏗️ Architecture Overview</h2>
+        
+        <h3>Project Structure</h3>
+        <div class="code-block">
+TrackMyExpenses/
+├── server/
+│   ├── server.js           # Main Express server
+│   ├── auth.js            # Authentication routes
+│   ├── expenses.js        # Expense CRUD operations
+│   ├── analytics.js       # Analytics & insights
+│   ├── chatbot.js         # AI chatbot handler
+│   ├── excel.js           # Excel file operations
+│   └── [routes]...
+├── public/
+│   ├── js/
+│   │   ├── auth.js        # Client authentication
+│   │   ├── dashboard.js   # Dashboard logic
+│   │   ├── expenses.js    # Expense management
+│   │   ├── reports.js     # Reports generation
+│   │   ├── chatbot.js     # Chatbot UI
+│   │   └── [scripts]...
+│   ├── css/
+│   │   ├── main.css       # Global styles
+│   │   ├── dashboard.css  # Dashboard styles
+│   │   └── [stylesheets]...
+│   └── uploads/           # User uploads (logos)
+├── views/
+│   ├── index.html         # Login page
+│   ├── signup.html        # Registration page
+│   ├── dashboard.html     # Main dashboard
+│   ├── reports.html       # Reports page
+│   ├── tracking.html      # Expense tracking
+│   ├── savings.html       # Savings goals
+│   ├── profile.html       # User profile
+│   └── [pages]...
+├── data/                  # Excel database files
+└── package.json           # Dependencies
+        </div>
+        
+        <div class="page-break"></div>
+        
+        <!-- Backend Section -->
+        <h2>⚙️ Backend Architecture</h2>
+        
+        <h3>Server Configuration</h3>
+        <div class="code-block">
+Express Server (Port 3000)
+├── Middleware
+│   ├── CORS - Cross-origin resource sharing
+│   ├── Body Parser - JSON & form data parsing
+│   ├── Session Management - User session handling
+│   └── Static Files - Public directory serving
+├── Routes (/api)
+│   ├── /auth - Authentication endpoints
+│   ├── /expenses - Expense operations
+│   ├── /analytics - Analytics & reports
+│   └── /chatbot - AI assistant
+└── Error Handling - 404 & 500 handlers
+        </div>
+        
+        <h3>Authentication Module</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Function</th>
+                    <th>Purpose</th>
+                    <th>Key Features</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>User Registration</strong></td>
+                    <td>Create new user accounts</td>
+                    <td>Email validation, password hashing, role assignment</td>
+                </tr>
+                <tr>
+                    <td><strong>User Login</strong></td>
+                    <td>Authenticate users</td>
+                    <td>Credential verification, session creation</td>
+                </tr>
+                <tr>
+                    <td><strong>Session Management</strong></td>
+                    <td>Maintain user sessions</td>
+                    <td>24-hour expiry, secure cookies</td>
+                </tr>
+                <tr>
+                    <td><strong>Password Hashing</strong></td>
+                    <td>Secure password storage</td>
+                    <td>bcrypt with salt rounds</td>
+                </tr>
+                <tr>
+                    <td><strong>File Uploads</strong></td>
+                    <td>Custom branding (logos)</td>
+                    <td>Size limits, file type validation</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="page-break"></div>
+        
+        <!-- API Documentation -->
+        <h2>🔌 API Documentation</h2>
+        
+        <h3>Authentication Endpoints</h3>
+        
+        <div class="api-endpoint">
+            <span class="api-method post">POST</span> /api/signup
+            <br>Create a new user account
+        </div>
+        
+        <div class="api-endpoint">
+            <span class="api-method post">POST</span> /api/login
+            <br>Authenticate user with email and password
+        </div>
+        
+        <div class="api-endpoint">
+            <span class="api-method post">POST</span> /api/logout
+            <br>End user session
+        </div>
+        
+        <div class="api-endpoint">
+            <span class="api-method get">GET</span> /api/user/:id
+            <br>Retrieve user profile information
+        </div>
+        
+        <div class="api-endpoint">
+            <span class="api-method put">PUT</span> /api/user/:id
+            <br>Update user profile (name, email, password, budget)
+        </div>
+        
+        <h3>Expense Endpoints</h3>
+        
+        <div class="api-endpoint">
+            <span class="api-method post">POST</span> /api/expenses
+            <br>Add a new expense (amount, category, date, paymentMode, notes)
+        </div>
+        
+        <div class="api-endpoint">
+            <span class="api-method get">GET</span> /api/expenses/:userId
+            <br>Retrieve all expenses for a specific user
+        </div>
+        
+        <div class="api-endpoint">
+            <span class="api-method put">PUT</span> /api/expenses/:expenseId
+            <br>Update an existing expense
+        </div>
+        
+        <div class="api-endpoint">
+            <span class="api-method delete">DELETE</span> /api/expenses/:expenseId
+            <br>Delete an expense record
+        </div>
+        
+        <h3>Analytics Endpoints</h3>
+        
+        <div class="api-endpoint">
+            <span class="api-method get">GET</span> /api/analytics/:userId
+            <br>Retrieve comprehensive analytics (totals, trends, suggestions)
+        </div>
+        
+        <div class="api-endpoint">
+            <span class="api-method get">GET</span> /api/savings/:userId
+            <br>Get savings goals and progress for user
+        </div>
+        
+        <div class="api-endpoint">
+            <span class="api-method post">POST</span> /api/savings
+            <br>Create new savings goal
+        </div>
+        
+        <h3>Chatbot Endpoints</h3>
+        
+        <div class="api-endpoint">
+            <span class="api-method post">POST</span> /api/chatbot/message
+            <br>Send message to AI chatbot and receive response
+        </div>
+        
+        <h3>Admin Endpoints</h3>
+        
+        <div class="api-endpoint">
+            <span class="api-method get">GET</span> /api/admin/users
+            <br>Get all users (admin only)
+        </div>
+        
+        <div class="api-endpoint">
+            <span class="api-method get">GET</span> /api/admin/all-expenses
+            <br>Get all expenses across all users (admin only)
+        </div>
+        
+        <div class="api-endpoint">
+            <span class="api-method post">POST</span> /api/admin/export
+            <br>Export data to Excel format (admin only)
+        </div>
+        
+        <div class="page-break"></div>
+        
+        <h2>📊 Application Flowchart</h2>
+        
+        <div class="highlight">
+            <strong>User Journey Overview:</strong><br>
+            User → Authentication → Dashboard → Select Action → Process → Analytics → Return Home
+        </div>
+        
+        <h3>Main Application Flow</h3>
+        
+        <div style="background: #f0f0f0; padding: 30px; border-radius: 8px; margin: 20px 0; font-family: monospace; line-height: 1.8;">
+            <strong>1. ENTRY POINT</strong><br>
+            └─ User visits application (http://localhost:3000)<br><br>
+            
+            <strong>2. AUTHENTICATION CHECK</strong><br>
+            ├─ Check if user has active session<br>
+            ├─ If Yes → Redirect to Dashboard<br>
+            └─ If No → Display Login/Signup Page<br><br>
+            
+            <strong>3. LOGIN/SIGNUP PROCESS</strong><br>
+            ├─ User enters credentials<br>
+            ├─ Backend validates (bcrypt hash comparison)<br>
+            ├─ Create session if valid<br>
+            └─ Redirect to Dashboard<br><br>
+            
+            <strong>4. DASHBOARD (Main Hub)</strong><br>
+            ├─ Load user profile<br>
+            ├─ Display quick stats<br>
+            └─ Present action menu<br><br>
+            
+            <strong>5. ACTION SELECTION</strong><br>
+            ├─ ADD EXPENSE<br>
+            │  └─ Form → Submit → Save to Excel → Refresh Analytics<br>
+            ├─ VIEW REPORTS<br>
+            │  └─ Fetch data → Calculate metrics → Generate charts → Display<br>
+            ├─ TRACK EXPENSES<br>
+            │  └─ List all → Filter → Edit/Delete options<br>
+            ├─ MANAGE PROFILE<br>
+            │  └─ Edit info → Update budget → Save changes<br>
+            ├─ SAVINGS GOALS<br>
+            │  └─ View goals → Track progress → Update targets<br>
+            ├─ CHATBOT<br>
+            │  └─ Query → AI processing → Response suggestions<br>
+            └─ LOGOUT<br>
+               └─ Clear session → Redirect to login<br><br>
+            
+            <strong>6. DATA FLOW</strong><br>
+            Frontend (HTML/JS) ↔ Express API ↔ Excel Database<br>
+            ↓<br>
+            Real-time UI Updates & Charts
+        </div>
+        
+        <div class="page-break"></div>
+        
+        <!-- Frontend Section -->
+        <h2>🎨 Frontend Architecture</h2>
+        
+        <h3>Key Pages & Components</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Page</th>
+                    <th>File</th>
+                    <th>Purpose</th>
+                    <th>Key Features</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Login</strong></td>
+                    <td>index.html</td>
+                    <td>User authentication entry</td>
+                    <td>Email/password input, validation</td>
+                </tr>
+                <tr>
+                    <td><strong>Signup</strong></td>
+                    <td>signup.html</td>
+                    <td>New account registration</td>
+                    <td>Name, email, password fields</td>
+                </tr>
+                <tr>
+                    <td><strong>Dashboard</strong></td>
+                    <td>dashboard.html</td>
+                    <td>Main user hub</td>
+                    <td>Quick stats, navigation menu</td>
+                </tr>
+                <tr>
+                    <td><strong>Expense Tracking</strong></td>
+                    <td>tracking.html</td>
+                    <td>List & manage expenses</td>
+                    <td>Add, edit, delete, filter</td>
+                </tr>
+                <tr>
+                    <td><strong>Reports & Analytics</strong></td>
+                    <td>reports.html</td>
+                    <td>Visual analytics & insights</td>
+                    <td>Charts, trends, excel export</td>
+                </tr>
+                <tr>
+                    <td><strong>Savings Goals</strong></td>
+                    <td>savings.html</td>
+                    <td>Savings tracking</td>
+                    <td>Goal creation, progress bars</td>
+                </tr>
+                <tr>
+                    <td><strong>User Profile</strong></td>
+                    <td>profile.html</td>
+                    <td>Account settings</td>
+                    <td>Edit info, logo upload, budget</td>
+                </tr>
+                <tr>
+                    <td><strong>Admin Panel</strong></td>
+                    <td>admin.html</td>
+                    <td>Admin controls</td>
+                    <td>User management, data export</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Client-Side JavaScript Modules</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Module</th>
+                    <th>File</th>
+                    <th>Responsibilities</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Authentication</strong></td>
+                    <td>auth.js</td>
+                    <td>Login/logout, session management, branding load</td>
+                </tr>
+                <tr>
+                    <td><strong>Dashboard</strong></td>
+                    <td>dashboard.js</td>
+                    <td>Main page interactions, navigation, stats display</td>
+                </tr>
+                <tr>
+                    <td><strong>Expenses</strong></td>
+                    <td>expenses.js</td>
+                    <td>Add/edit/delete expenses, form validation</td>
+                </tr>
+                <tr>
+                    <td><strong>Reports</strong></td>
+                    <td>reports.js</td>
+                    <td>Chart rendering, data visualization, export</td>
+                </tr>
+                <tr>
+                    <td><strong>Chatbot</strong></td>
+                    <td>chatbot.js</td>
+                    <td>AI chatbot interface, message handling</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="page-break"></div>
+        
+        <!-- Data Flow -->
+        <h2>🔄 Data Flow & Processing</h2>
+        
+        <h3>Expense Addition Flow</h3>
+        <div style="background: #f0f0f0; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <strong>Frontend:</strong><br>
+            1. User fills expense form (amount, category, date, payment mode, notes)<br>
+            2. Form validation on client-side<br>
+            3. Send POST request to /api/expenses<br><br>
+            
+            <strong>Backend:</strong><br>
+            4. Receive and validate data<br>
+            5. Create unique ID (UUID)<br>
+            6. Add timestamp<br>
+            7. Write to Excel database<br>
+            8. Return success response<br><br>
+            
+            <strong>Frontend:</strong><br>
+            9. Display success message<br>
+            10. Refresh expense list<br>
+            11. Update analytics/charts<br>
+            12. Clear form fields
+        </div>
+        
+        <h3>Analytics Calculation Process</h3>
+        <div style="background: #f0f0f0; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <strong>Data Collection:</strong><br>
+            • Fetch all user expenses from Excel<br>
+            • Group by category<br>
+            • Group by payment mode<br>
+            • Sort by date<br><br>
+            
+            <strong>Calculations:</strong><br>
+            • Total spent (sum of all amounts)<br>
+            • Daily average (total / days)<br>
+            • Monthly trends (group by month)<br>
+            • Category breakdown (percentage)<br>
+            • Payment mode statistics<br>
+            • Month-over-month comparison<br>
+            • Budget vs. spending analysis<br><br>
+            
+            <strong>Visualizations:</strong><br>
+            • Pie chart (category breakdown)<br>
+            • Bar chart (payment modes)<br>
+            • Line chart (yearly trends)<br>
+            • Progress bar (budget status)<br>
+            • Top 5 categories table
+        </div>
+        
+        <div class="page-break"></div>
+        
+        <!-- Analytics Engine -->
+        <h2>📈 Analytics Engine</h2>
+        
+        <h3>Smart Analytics Features</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Calculation Method</th>
+                    <th>Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Total Spent</strong></td>
+                    <td>Sum of all expense amounts</td>
+                    <td>Overall spending overview</td>
+                </tr>
+                <tr>
+                    <td><strong>Daily Average</strong></td>
+                    <td>Total spent ÷ Days elapsed</td>
+                    <td>Daily spending rate tracking</td>
+                </tr>
+                <tr>
+                    <td><strong>Category Breakdown</strong></td>
+                    <td>Sum by category + percentage</td>
+                    <td>Identify high-spending categories</td>
+                </tr>
+                <tr>
+                    <td><strong>Monthly Trends</strong></td>
+                    <td>Group by month, calculate totals</td>
+                    <td>Seasonal spending patterns</td>
+                </tr>
+                <tr>
+                    <td><strong>Month-over-Month</strong></td>
+                    <td>Compare current vs. previous month</td>
+                    <td>Track spending changes</td>
+                </tr>
+                <tr>
+                    <td><strong>Budget Status</strong></td>
+                    <td>(Total spent / Budget) × 100</td>
+                    <td>Budget utilization percentage</td>
+                </tr>
+                <tr>
+                    <td><strong>Smart Suggestions</strong></td>
+                    <td>Rule-based on spending metrics</td>
+                    <td>Personalized financial advice</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>AI Chatbot Capabilities</h3>
+        <div class="feature-list">
+            <div class="feature-item">
+                <strong>💬 Greeting & Help</strong><br>
+                Natural language greeting responses and help directions
+            </div>
+            <div class="feature-item">
+                <strong>💰 Spending Queries</strong><br>
+                "How much have I spent?" → Calculates total vs. budget
+            </div>
+            <div class="feature-item">
+                <strong>📊 Category Breakdown</strong><br>
+                "Show category breakdown" → Analyzes spending by category
+            </div>
+            <div class="feature-item">
+                <strong>⚠️ Overspending Detection</strong><br>
+                Alerts when spending exceeds budget threshold
+            </div>
+            <div class="feature-item">
+                <strong>💡 Budget Suggestions</strong><br>
+                Provides personalized saving and spending tips
+            </div>
+            <div class="feature-item">
+                <strong>🎯 Goal Recommendations</strong><br>
+                Suggests realistic savings goals based on patterns
+            </div>
+        </div>
+        
+        <div class="page-break"></div>
+        
+        <!-- Security & Best Practices -->
+        <h2>🔒 Security & Best Practices</h2>
+        
+        <h3>Security Measures</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Security Aspect</th>
+                    <th>Implementation</th>
+                    <th>Protection</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Password Security</strong></td>
+                    <td>bcrypt hashing (salt rounds: 10)</td>
+                    <td>Protects against rainbow table attacks</td>
+                </tr>
+                <tr>
+                    <td><strong>Session Management</strong></td>
+                    <td>express-session with secure cookies</td>
+                    <td>24-hour expiry, prevents session hijacking</td>
+                </tr>
+                <tr>
+                    <td><strong>CORS Policy</strong></td>
+                    <td>CORS middleware enabled</td>
+                    <td>Control cross-origin requests</td>
+                </tr>
+                <tr>
+                    <td><strong>Input Validation</strong></td>
+                    <td>Server-side validation on all endpoints</td>
+                    <td>Prevents malicious data injection</td>
+                </tr>
+                <tr>
+                    <td><strong>File Upload Security</strong></td>
+                    <td>filetype & size validation via Multer</td>
+                    <td>Only allows image uploads ≤5MB</td>
+                </tr>
+                <tr>
+                    <td><strong>Error Handling</strong></td>
+                    <td>Generic error messages to clients</td>
+                    <td>Prevents information disclosure</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Best Practices Implementation</h3>
+        <ul>
+            <li><strong>State Management:</strong> Session storage for client-side user data</li>
+            <li><strong>Code Organization:</strong> Modular route handlers (auth, expenses, analytics)</li>
+            <li><strong>Error Handling:</strong> Try-catch blocks with meaningful error messages</li>
+            <li><strong>API Design:</strong> RESTful endpoints with proper HTTP methods</li>
+            <li><strong>Frontend Validation:</strong> Client-side form validation before submission</li>
+            <li><strong>Responsive Design:</strong> Mobile-first CSS with media queries</li>
+            <li><strong>Performance:</strong> Efficient database queries and chart rendering</li>
+            <li><strong>Accessibility:</strong> Semantic HTML, ARIA labels, keyboard navigation</li>
+        </ul>
+        
+        <div class="page-break"></div>
+        
+        <!-- Features Details -->
+        <h2>🎯 Detailed Feature Specifications</h2>
+        
+        <h3>1. Expense Tracking System</h3>
+        <div class="section">
+            <strong>Supported Expense Categories:</strong>
+            <ul>
+                <li>Food & Dining</li>
+                <li>Transportation</li>
+                <li>Utilities & Bills</li>
+                <li>Healthcare & Medical</li>
+                <li>Entertainment & Leisure</li>
+                <li>Shopping & Personal</li>
+                <li>Education</li>
+                <li>Travel</li>
+                <li>Other</li>
+            </ul>
+            
+            <strong>Payment Modes Supported:</strong>
+            <ul>
+                <li>Cash</li>
+                <li>Credit Card</li>
+                <li>Debit Card</li>
+                <li>Mobile Wallet</li>
+                <li>Bank Transfer</li>
+            </ul>
+        </div>
+        
+        <h3>2. Budget Management</h3>
+        <div class="section">
+            <strong>Features:</strong>
+            <ul>
+                <li>Set monthly budget limit</li>
+                <li>Real-time budget usage tracker</li>
+                <li>Color-coded alerts (green/yellow/red)</li>
+                <li>Spending rate comparison</li>
+                <li>Budget utilization percentage</li>
+                <li>Spending suggestions based on budget</li>
+            </ul>
+        </div>
+        
+        <h3>3. User Roles & Permissions</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Permissions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>User</strong></td>
+                    <td>Add/edit/delete own expenses, manage profile, view own analytics, access chatbot</td>
+                </tr>
+                <tr>
+                    <td><strong>Admin</strong></td>
+                    <td>All user features + manage other users, view all expenses, export data, manage branding</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="page-break"></div>
+        
+        <!-- Installation & Deployment -->
+        <h2>🚀 Installation & Setup Guide</h2>
+        
+        <h3>Prerequisites</h3>
+        <ul>
+            <li>Node.js (v14 or higher)</li>
+            <li>npm (v6 or higher)</li>
+            <li>Modern web browser (Chrome, Firefox, Safari, Edge)</li>
+        </ul>
+        
+        <h3>Installation Steps</h3>
+        <div class="code-block">
+# 1. Navigate to project directory
+cd TrackMyExpenses
+
+# 2. Install dependencies
+npm install
+
+# 3. Start the server
+npm start
+
+# 4. Open in browser
+http://localhost:3000
+        </div>
+        
+        <h3>Dependencies</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Package</th>
+                    <th>Version</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>express</td>
+                    <td>^4.18.2</td>
+                    <td>Web framework</td>
+                </tr>
+                <tr>
+                    <td>xlsx</td>
+                    <td>^0.18.5</td>
+                    <td>Excel file handling</td>
+                </tr>
+                <tr>
+                    <td>bcrypt</td>
+                    <td>^5.1.1</td>
+                    <td>Password hashing</td>
+                </tr>
+                <tr>
+                    <td>express-session</td>
+                    <td>^1.17.3</td>
+                    <td>Session management</td>
+                </tr>
+                <tr>
+                    <td>multer</td>
+                    <td>^1.4.5-lts.1</td>
+                    <td>File uploads</td>
+                </tr>
+                <tr>
+                    <td>body-parser</td>
+                    <td>^1.20.2</td>
+                    <td>Request body parsing</td>
+                </tr>
+                <tr>
+                    <td>cors</td>
+                    <td>^2.8.5</td>
+                    <td>Cross-origin support</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Demo Credentials</h3>
+        <div class="highlight">
+            <strong>Demo User Account:</strong><br>
+            Email: demo@example.com<br>
+            Password: demo1234<br><br>
+            
+            <strong>Admin Account:</strong><br>
+            Email: admin@example.com<br>
+            Password: admin1234
+        </div>
+        
+        <div class="page-break"></div>
+        
+        <!-- Database Schema -->
+        <h2>💾 Data Structure & Database Schema</h2>
+        
+        <h3>Users Table (Excel)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Data Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>UUID</td>
+                    <td>Unique user identifier</td>
+                </tr>
+                <tr>
+                    <td>Full Name</td>
+                    <td>String</td>
+                    <td>User's full name</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>String</td>
+                    <td>Email address (unique)</td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td>String (hashed)</td>
+                    <td>bcrypt hashed password</td>
+                </tr>
+                <tr>
+                    <td>Budget</td>
+                    <td>Number</td>
+                    <td>Monthly budget limit</td>
+                </tr>
+                <tr>
+                    <td>Role</td>
+                    <td>String</td>
+                    <td>user or admin</td>
+                </tr>
+                <tr>
+                    <td>Logo URL</td>
+                    <td>String</td>
+                    <td>Custom logo path</td>
+                </tr>
+                <tr>
+                    <td>Created At</td>
+                    <td>DateTime</td>
+                    <td>Account creation date</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Expenses Table (Excel)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Data Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>UUID</td>
+                    <td>Unique expense identifier</td>
+                </tr>
+                <tr>
+                    <td>User ID</td>
+                    <td>UUID</td>
+                    <td>Reference to Users table</td>
+                </tr>
+                <tr>
+                    <td>Amount</td>
+                    <td>Decimal</td>
+                    <td>Expense amount in rupees</td>
+                </tr>
+                <tr>
+                    <td>Category</td>
+                    <td>String</td>
+                    <td>Expense category</td>
+                </tr>
+                <tr>
+                    <td>Date</td>
+                    <td>Date</td>
+                    <td>Expense date</td>
+                </tr>
+                <tr>
+                    <td>Payment Mode</td>
+                    <td>String</td>
+                    <td>Payment method used</td>
+                </tr>
+                <tr>
+                    <td>Notes</td>
+                    <td>String</td>
+                    <td>Additional notes</td>
+                </tr>
+                <tr>
+                    <td>Created At</td>
+                    <td>DateTime</td>
+                    <td>Record creation timestamp</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Savings Goals Table (Excel)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Data Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>UUID</td>
+                    <td>Unique goal identifier</td>
+                </tr>
+                <tr>
+                    <td>User ID</td>
+                    <td>UUID</td>
+                    <td>Reference to Users table</td>
+                </tr>
+                <tr>
+                    <td>Goal Name</td>
+                    <td>String</td>
+                    <td>Name of savings goal</td>
+                </tr>
+                <tr>
+                    <td>Target Amount</td>
+                    <td>Decimal</td>
+                    <td>Target savings amount</td>
+                </tr>
+                <tr>
+                    <td>Current Amount</td>
+                    <td>Decimal</td>
+                    <td>Current saved amount</td>
+                </tr>
+                <tr>
+                    <td>Target Date</td>
+                    <td>Date</td>
+                    <td>Goal completion date</td>
+                </tr>
+                <tr>
+                    <td>Category</td>
+                    <td>String</td>
+                    <td>Goal category (e.g., vacation, car)</td>
+                </tr>
+                <tr>
+                    <td>Created At</td>
+                    <td>DateTime</td>
+                    <td>Goal creation timestamp</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="page-break"></div>
+        
+        <!-- Performance & Optimization -->
+        <h2>⚡ Performance Optimization</h2>
+        
+        <h3>Frontend Optimization</h3>
+        <ul>
+            <li><strong>Chart Rendering:</strong> C3.js provides efficient chart updates without full re-renders</li>
+            <li><strong>Session Storage:</strong> User data cached in browser to reduce API calls</li>
+            <li><strong>Lazy Loading:</strong> Charts only render when page is visible</li>
+            <li><strong>CSS Optimization:</strong> Separate stylesheets for each page to reduce load</li>
+            <li><strong>Event Delegation:</strong> Single event listeners for dynamic content</li>
+            <li><strong>Async Operations:</strong> Non-blocking API calls with async/await</li>
+        </ul>
+        
+        <h3>Backend Optimization</h3>
+        <ul>
+            <li><strong>Excel Caching:</strong> In-memory data processing reduces I/O</li>
+            <li><strong>Index Optimization:</strong> Efficient array filtering by User ID</li>
+            <li><strong>Response Compression:</strong> JSON payloads minimized</li>
+            <li><strong>Error Handling:</strong> Prevents unnecessary database queries</li>
+            <li><strong>Connection Reuse:</strong> Single Express app instance</li>
+        </ul>
+        
+        <!-- Scaling & Future Enhancements -->
+        <h2>🔮 Future Enhancements & Scaling</h2>
+        
+        <h3>Planned Features</h3>
+        <ul>
+            <li><strong>Real Database:</strong> Migration from Excel to MongoDB/PostgreSQL</li>
+            <li><strong>Mobile App:</strong> React Native or Flutter mobile application</li>
+            <li><strong>Advanced Analytics:</strong> Predictive spending analysis with ML</li>
+            <li><strong>Social Features:</strong> Share budgets with family/groups</li>
+            <li><strong>Bill Automation:</strong> Recurring bill tracking and reminders</li>
+            <li><strong>Investment Tracking:</strong> Portfolio management integration</li>
+            <li><strong>Multi-currency:</strong> Support for multiple currencies</li>
+            <li><strong>API Integration:</strong> Bank account auto-sync capability</li>
+            <li><strong>Push Notifications:</strong> Budget alerts and reminders</li>
+            <li><strong>Dark Mode:</strong> UI theme customization</li>
+        </ul>
+        
+        <h3>Scaling Strategy</h3>
+        <ul>
+            <li><strong>Database:</strong> Migrate to cloud database (AWS RDS, MongoDB Atlas)</li>
+            <li><strong>File Storage:</strong> AWS S3 for user uploads</li>
+            <li><strong>Backend:</strong> Deploy to cloud platforms (Railway, Heroku, AWS EC2)</li>
+            <li><strong>Frontend:</strong> CDN hosting for static assets</li>
+            <li><strong>Caching:</strong> Redis for session and data caching</li>
+            <li><strong>Load Balancing:</strong> Nginx for distributing traffic</li>
+            <li><strong>Monitoring:</strong> Implement logging and error tracking</li>
+        </ul>
+        
+        <div class="page-break"></div>
+        
+        <!-- Testing -->
+        <h2>🧪 Testing Strategy</h2>
+        
+        <h3>Frontend Testing</h3>
+        <ul>
+            <li><strong>Unit Tests:</strong> Individual function validation (Jest)</li>
+            <li><strong>Integration Tests:</strong> API endpoint testing</li>
+            <li><strong>UI Testing:</strong> User interaction scenarios</li>
+            <li><strong>Cross-browser:</strong> Chrome, Firefox, Safari, Edge compatibility</li>
+            <li><strong>Responsive Testing:</strong> Mobile, tablet, desktop breakpoints</li>
+        </ul>
+        
+        <h3>Backend Testing</h3>
+        <ul>
+            <li><strong>API Testing:</strong> POST/GET/PUT/DELETE endpoints</li>
+            <li><strong>Authentication Testing:</strong> Login, signup, session management</li>
+            <li><strong>Data Validation:</strong> Input validation testing</li>
+            <li><strong>Error Handling:</strong> Exception scenarios</li>
+            <li><strong>Performance Testing:</strong> Load testing with multiple concurrent users</li>
+        </ul>
+        
+        <h3>Data Testing</h3>
+        <ul>
+            <li><strong>Data Integrity:</strong> Excel file consistency</li>
+            <li><strong>Calculations:</strong> Analytics accuracy verification</li>
+            <li><strong>Export Testing:</strong> Excel export functionality</li>
+        </ul>
+        
+        <div class="page-break"></div>
+        
+        <!-- Troubleshooting -->
+        <h2>🔧 Troubleshooting Guide</h2>
+        
+        <h3>Common Issues & Solutions</h3>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Issue</th>
+                    <th>Cause</th>
+                    <th>Solution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Port 3000 in use</strong></td>
+                    <td>Another process using the port</td>
+                    <td>Change PORT in server.js or kill existing process</td>
+                </tr>
+                <tr>
+                    <td><strong>Module not found</strong></td>
+                    <td>Missing dependencies</td>
+                    <td>Run: npm install</td>
+                </tr>
+                <tr>
+                    <td><strong>Session not persisting</strong></td>
+                    <td>Browser storage disabled</td>
+                    <td>Enable sessionStorage/localStorage in browser</td>
+                </tr>
+                <tr>
+                    <td><strong>Charts not rendering</strong></td>
+                    <td>C3.js library not loaded</td>
+                    <td>Check browser console for errors</td>
+                </tr>
+                <tr>
+                    <td><strong>File upload failing</strong></td>
+                    <td>Upload directory doesn't exist</td>
+                    <td>Multer creates directory automatically</td>
+                </tr>
+                <tr>
+                    <td><strong>Login failing</strong></td>
+                    <td>Incorrect credentials or no users</td>
+                    <td>Create account or use demo credentials</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="page-break"></div>
+        
+        <!-- Support & Documentation -->
+        <h2>📞 Support & Additional Resources</h2>
+        
+        <h3>Documentation Structure</h3>
+        <ul>
+            <li><strong>README.md:</strong> Project overview and quick start</li>
+            <li><strong>Installation Guide:</strong> Setup instructions</li>
+            <li><strong>API Documentation:</strong> Detailed endpoint reference</li>
+            <li><strong>Architecture Guide:</strong> System design and components</li>
+            <li><strong>Contributing Guide:</strong> Development guidelines</li>
+        </ul>
+        
+        <h3>External Resources</h3>
+        <ul>
+            <li><strong>Express.js Documentation:</strong> https://expressjs.com</li>
+            <li><strong>Node.js Guide:</strong> https://nodejs.org/docs</li>
+            <li><strong>C3.js Charts:</strong> https://c3js.org</li>
+            <li><strong>bcrypt Documentation:</strong> https://github.com/kelektiv/node.bcrypt.js</li>
+            <li><strong>Multer Upload:</strong> https://github.com/expressjs/multer</li>
+        </ul>
+        
+        <!-- Conclusion -->
+        <h2>✅ Conclusion</h2>
+        <div class="section">
+            <p><strong>TrackMyExpenses</strong> is a comprehensive, production-ready expense tracking application that combines modern web technologies with intelligent financial analysis. The application demonstrates best practices in:</p>
+            <ul>
+                <li>✓ User authentication and session management</li>
+                <li>✓ RESTful API design</li>
+                <li>✓ Real-time data visualization</li>
+                <li>✓ Responsive user interface</li>
+                <li>✓ Security and error handling</li>
+                <li>✓ Scalable architecture</li>
+            </ul>
+            <p style="margin-top: 20px;">The platform provides users with powerful tools to understand their spending habits, manage budgets effectively, and make informed financial decisions with AI-powered insights.</p>
+        </div>
+        
+        <div class="footer">
+            <p>TrackMyExpenses Documentation | Version 1.0.0 | Generated February 2026</p>
+            <p>For more information, visit: http://localhost:3000</p>
+        </div>
+        
+    </div>
+    
+    <script>
+        // Print function for PDF generation
+        window.addEventListener('load', function() {
+            console.log('Documentation loaded. Use Ctrl+P or Cmd+P to print to PDF.');
+        });
+    </script>
+</body>
+</html>

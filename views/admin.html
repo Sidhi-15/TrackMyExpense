@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - TrackMyExpenses</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Initialize dark theme immediately to prevent UI flashing
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme !== 'light') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Mobile Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="/images/logo.png" alt="TrackMyExpenses logo" class="brand-logo">
+                <h3 class="brand-title">TrackMyExpenses</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin.html" class="nav-link active"><i class="fas fa-cog"></i><span>Admin Panel</span></a>
+                <a href="/dashboard.html" class="nav-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <div class="nav-divider"></div>
+                <a href="#" class="nav-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <!-- Header with Toggle -->
+            <header class="dashboard-header flex-between" style="padding: 1rem 0;">
+                <button id="sidebarToggle" class="btn btn-icon hide-desktop" title="Open menu" style="background: var(--gray); color: var(--text-primary);">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2 style="margin:0; flex: 1;">Admin Panel</h2>
+                <div class="header-actions">
+                    <button id="themeToggle" class="theme-toggle-btn" title="Toggle Light / Dark Mode">
+                        <i class="fas fa-moon"></i>
+                        <span class="theme-label">Dark Mode</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <!-- Export Button -->
+                <div style="margin-bottom: 1.5rem;">
+                    <button class="btn btn-success" id="exportBtn">
+                        <i class="fas fa-file-excel"></i> Export Excel
+                    </button>
+                </div>
+
+                <div class="grid grid-4">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--primary-gradient);"><i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 class="stat-value" id="totalUsers">0</h3>
+                            <p class="stat-label">Total Users</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--secondary-gradient);"><i
+                                class="fas fa-receipt"></i></div>
+                        <div class="stat-info">
+                            <h3 class="stat-value" id="totalExpenses">0</h3>
+                            <p class="stat-label">Total Expenses</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--danger-gradient);"><i
+                                class="fas fa-money-bill-wave"></i></div>
+                        <div class="stat-info">
+                            <h3 class="stat-value" id="totalAmount">₹0</h3>
+                            <p class="stat-label">Total Amount</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--warning-gradient);"><i
+                                class="fas fa-exclamation-triangle"></i></div>
+                        <div class="stat-info">
+                            <h3 class="stat-value" id="overspendingUsers">0</h3>
+                            <p class="stat-label">Overspending Users</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <h3 class="card-title"><i class="fas fa-users-cog"></i> User Management</h3>
+                    <div id="usersTable" class="admin-table">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <h3 class="card-title"><i class="fas fa-chart-bar"></i> User Analytics</h3>
+                    <div id="userAnalytics"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        let currentUser = requireAuth();
+        if (!currentUser || currentUser.role !== 'admin') {
+            alert('Access denied. Admin only.');
+            location.href = '/dashboard.html';
+        }
+
+        loadBranding();
+        loadAdminData();
+
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            logout();
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            window.location.href = '/api/admin/export';
+        });
+
+        async function loadAdminData() {
+            try {
+                const response = await fetch('/api/admin/analytics');
+                const data = await response.json();
+
+                document.getElementById('totalUsers').textContent = data.statistics.totalUsers;
+                document.getElementById('totalExpenses').textContent = data.statistics.totalExpenses;
+                document.getElementById('totalAmount').textContent = '₹' + parseFloat(data.statistics.totalAmount).toFixed(2);
+                document.getElementById('overspendingUsers').textContent = data.statistics.overspendingUsers;
+
+                renderUsersTable(data.userAnalytics);
+                renderUserAnalytics(data.userAnalytics);
+            } catch (error) {
+                console.error('Error loading admin data:', error);
+            }
+        }
+
+        function renderUsersTable(users) {
+            const container = document.getElementById('usersTable');
+
+            if (!users || users.length === 0) {
+                container.innerHTML = '<p style="text-align: center; padding: 2rem;">No users found</p>';
+                return;
+            }
+
+            let html = `
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: var(--light-gray); text-align: left;">
+                            <th style="padding: 1rem;">ID</th>
+                            <th style="padding: 1rem;">Name</th>
+                            <th style="padding: 1rem;">Email</th>
+                            <th style="padding: 1rem;">Budget</th>
+                            <th style="padding: 1rem;">Spent</th>
+                            <th style="padding: 1rem;">Expenses</th>
+                            <th style="padding: 1rem;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            users.forEach(user => {
+                const statusClass = user.isOverspending ? 'danger' : 'success';
+                const statusText = user.isOverspending ? 'Overspending' : 'On Track';
+
+                html += `
+                    <tr style="border-bottom: 1px solid var(--gray);">
+                        <td style="padding: 1rem;">${user.id}</td>
+                        <td style="padding: 1rem; font-weight: 600;">${user.name}</td>
+                        <td style="padding: 1rem; color: var(--text-secondary);">${user.email}</td>
+                        <td style="padding: 1rem;">₹${parseFloat(user.budget).toFixed(2)}</td>
+                        <td style="padding: 1rem; font-weight: 700; color: var(--danger);">₹${parseFloat(user.totalSpent).toFixed(2)}</td>
+                        <td style="padding: 1rem;">${user.expenseCount}</td>
+                        <td style="padding: 1rem;">
+                            <span class="badge badge-${statusClass}">${statusText}</span>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function renderUserAnalytics(users) {
+            const container = document.getElementById('userAnalytics');
+            const overspending = users.filter(u => u.isOverspending);
+
+            if (overspending.length === 0) {
+                container.innerHTML = '<p style="padding: 2rem; text-align: center; color: var(--text-secondary);">No overspending users</p>';
+                return;
+            }
+
+            let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">';
+
+            overspending.forEach(user => {
+                html += `
+                    <div style="padding: 1.5rem; background: var(--light-gray); border-left: 4px solid var(--danger); border-radius: var(--radius-md);">
+                        <h4 style="margin-bottom: 0.5rem;">${user.name}</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">${user.email}</p>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Budget:</span>
+                            <span style="font-weight: 600;">₹${parseFloat(user.budget).toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Spent:</span>
+                            <span style="font-weight: 600; color: var(--danger);">₹${parseFloat(user.totalSpent).toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--danger); padding-top: 0.5rem; border-top: 1px solid var(--gray);">
+                            <span>Over by:</span>
+                            <span>₹${parseFloat(user.overspendingAmount).toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+    </script>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header" id="chatbotHeader">
+            <div class="chatbot-title">
+                <i class="fas fa-robot"></i>
+                <span>Financial Assistant</span>
+            </div>
+            <button class="chatbot-close" id="chatbotClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-body" id="chatbotBody">
+            <div class="chat-message bot-message">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    Hello! 👋 I'm your financial assistant. How can I help you today?
+                </div>
+            </div>
+        </div>
+        <div class="chatbot-suggestions" id="chatbotSuggestions"></div>
+        <div class="chatbot-footer">
+            <input type="text" id="chatbotInput" placeholder="Ask me anything about your finances..."
+                class="chatbot-input">
+            <button class="chatbot-send" id="chatbotSend">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <button class="chatbot-toggle" id="chatbotToggle">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <script src="/js/chatbot.js"></script>

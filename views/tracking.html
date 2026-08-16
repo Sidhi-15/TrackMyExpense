@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracking - TrackMyExpenses</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Initialize dark theme immediately to prevent UI flashing
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme !== 'light') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Mobile Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="/images/logo.png" alt="TrackMyExpenses logo" class="brand-logo">
+                <h3 class="brand-title">TrackMyExpenses</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard.html" class="nav-link">
+                    <i class="fas fa-th-large"></i><span>Dashboard</span>
+                </a>
+                <a href="/tracking.html" class="nav-link active">
+                    <i class="fas fa-wallet"></i><span>Tracking</span>
+                </a>
+                <a href="/savings.html" class="nav-link">
+                    <i class="fas fa-piggy-bank"></i><span>Savings</span>
+                </a>
+                <a href="/reports.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i><span>Reports & Analytics</span>
+                </a>
+                <a href="/predictions.html" class="nav-link">
+                    <i class="fas fa-brain"></i><span>AI Predictions</span>
+                </a>
+                <a href="/profile.html" class="nav-link">
+                    <i class="fas fa-user"></i><span>Profile</span>
+                </a>
+                <div class="nav-divider"></div>
+                <a href="#" class="nav-link" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header with Toggle -->
+            <header class="dashboard-header">
+                <button id="sidebarToggle" class="btn btn-icon hide-desktop" title="Open menu" style="background: var(--gray); color: var(--text-primary);">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2>Tracking</h2>
+                <div class="header-actions">
+                    <button id="themeToggle" class="theme-toggle-btn" title="Toggle Light / Dark Mode">
+                        <i class="fas fa-moon"></i>
+                        <span class="theme-label">Dark Mode</span>
+                    </button>
+                    <div class="user-greeting">Hi, <span id="userName">User</span>!</div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <!-- Add Expense Button -->
+                <div style="margin-bottom: 1.5rem;">
+                    <button class="btn btn-primary" id="addExpenseBtn">
+                        <i class="fas fa-plus"></i> Add Expense
+                    </button>
+                </div>
+
+                <!-- Add Expense Form -->
+                <div class="card animate-fade-in-up" id="expenseFormCard">
+                    <h3 class="card-title"><i class="fas fa-plus-circle"></i> Add New Expense</h3>
+                    <form id="expenseForm" class="grid grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Amount (₹)</label>
+                            <input type="number" id="expenseAmount" class="form-input" placeholder="Enter amount"
+                                required step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select id="expenseCategory" class="form-select" required>
+                                <option value="">Select category</option>
+                                <option value="Food">🍔 Food</option>
+                                <option value="Travel">🚗 Travel</option>
+                                <option value="Shopping">🛍️ Shopping</option>
+                                <option value="Bills">📄 Bills</option>
+                                <option value="Entertainment">🎬 Entertainment</option>
+                                <option value="Health">💊 Health</option>
+                                <option value="Education">📚 Education</option>
+                                <option value="Other">📌 Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" id="expenseDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Payment Mode</label>
+                            <select id="expensePaymentMode" class="form-select" required>
+                                <option value="">Select payment mode</option>
+                                <option value="Cash">💵 Cash</option>
+                                <option value="UPI">📱 UPI</option>
+                                <option value="Card">💳 Card</option>
+                                <option value="Net Banking">🏦 Net Banking</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label class="form-label">Notes (Optional)</label>
+                            <input type="text" id="expenseNotes" class="form-input" placeholder="Add notes or tags">
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Expense
+                            </button>
+                            <button type="button" class="btn btn-outline" id="cancelExpenseBtn"
+                                style="margin-left: 10px;">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Filter Section -->
+                <div class="card mt-4">
+                    <h3 class="card-title"><i class="fas fa-filter"></i> Filters</h3>
+                    <div class="grid grid-3">
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select id="filterCategory" class="form-select">
+                                <option value="">All Categories</option>
+                                <option value="Food">Food</option>
+                                <option value="Travel">Travel</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Bills">Bills</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Health">Health</option>
+                                <option value="Education">Education</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">From Date</label>
+                            <input type="date" id="filterFromDate" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">To Date</label>
+                            <input type="date" id="filterToDate" class="form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expenses List -->
+                <div class="card mt-4">
+                    <h3 class="card-title"><i class="fas fa-list"></i> All Expenses</h3>
+                    <div id="expensesList" class="expenses-table">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header" id="chatbotHeader">
+            <div class="chatbot-title">
+                <i class="fas fa-robot"></i>
+                <span>Financial Assistant</span>
+            </div>
+            <button class="chatbot-close" id="chatbotClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-body" id="chatbotBody">
+            <div class="chat-message bot-message">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    Hello! 👋 I'm your financial assistant. How can I help you today?
+                </div>
+            </div>
+        </div>
+        <div class="chatbot-suggestions" id="chatbotSuggestions"></div>
+        <div class="chatbot-footer">
+            <input type="text" id="chatbotInput" placeholder="Ask me anything about your finances..."
+                class="chatbot-input">
+            <button class="chatbot-send" id="chatbotSend">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <button class="chatbot-toggle" id="chatbotToggle">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/expenses.js"></script>
+    <script src="/js/chatbot.js"></script>
+</body>
+
+</html>
