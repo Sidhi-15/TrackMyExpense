@@ -46,16 +46,6 @@ Open your browser and navigate to:
 http://localhost:3000
 ```
 
-## 🔑 Demo Credentials
-
-### User Account
-- **Email**: user@demo.com
-- **Password**: user123
-
-### Admin Account
-- **Email**: sidhi@admin.com
-- **Password**: admin123
-
 ## 📁 Project Structure
 
 ```
